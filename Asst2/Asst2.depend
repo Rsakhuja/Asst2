@@ -1,0 +1,10 @@
+# depslib dependency file v1.0
+1519359829 source:c:\users\siddharth\documents\github\asst2\asst2\tester.c
+	"stringsorter.c"
+
+1519359841 c:\users\siddharth\documents\github\asst2\asst2\stringsorter.c
+	<ctype.h>
+	<string.h>
+	<stdlib.h>
+	<stdio.h>
+
