@@ -2,9 +2,16 @@
 1519359829 source:c:\users\siddharth\documents\github\asst2\asst2\tester.c
 	"stringsorter.c"
 
-1519359841 c:\users\siddharth\documents\github\asst2\asst2\stringsorter.c
-	<ctype.h>
-	<string.h>
-	<stdlib.h>
+1520371588 c:\users\siddharth\documents\github\asst2\asst2\stringsorter.c
 	<stdio.h>
+	<stdlib.h>
+	<string.h>
+	<ctype.h>
+
+1520371624 source:c:\users\siddharth\documents\github\asst2\asst2\main.c
+	"stringsorter.c"
+	<stdio.h>
+	<stdlib.h>
+	<string.h>
+	<ctype.h>
 

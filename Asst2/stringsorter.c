@@ -1,32 +1,30 @@
-#include <ctype.h>
-#include <string.h>
-#include <stdlib.h>
 #include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
+#include <ctype.h>
 
-typedef struct wordNode{
-    char * word;
-    struct wordNode * next;
-}wordNode;
+typedef struct wordNode{   //This is a struct to lay out a basic node in the linked list used later in the program to hold all the "words" in the long string
+        char * word;        //The data of this node is the word
+        struct wordNode * next; //pointer to next node of LL
+}wordNode;  //alias of node is wordNode
 
-wordNode * insertNode(char * word, wordNode * head);
+//Below are the declarations of all functions and variables that will be used in the program
+wordNode * insertNode(char* word, wordNode * head);
 wordNode * sort(wordNode * head);
-wordNode * nodeAtIndex(int index, wordNode * head);
-void makeSpaces(char * longString);
-int allUsed(int used[]);
 int numTokens;
-wordNode * tokenizeString(char * longString);
-
-int main(){
-wordNode * hey = tokenizeString("hi my name is sid");
-}
-
-
-wordNode * tokenizeString(char * longString){
-if (strlen(longString) == 0)//if empty input string print empty output string
+wordNode * nodeAtIndex(int index, wordNode * head);
+void makeSpaces(char * str);
+void fillDels(char delims[], char * longString);
+int allUsed(int used[]);
+wordNode * tokenizeString(char * str)
+{
+	if (strlen(str) == 0)//if empty input string print empty output string
 	{
 		puts("");
-		return NULL;
+		return 0;
 	}
+	char * longString = (char*)malloc(sizeof(char*));
+	memcpy((void *)longString,(void *)str,strlen(str));
     makeSpaces(longString);
     char delims[2] = " ";   //create char array delims with just the space
     char * token=strtok(longString, delims);    //initiate string tokenizer by setting it equal to the first token in the string
@@ -44,6 +42,13 @@ if (strlen(longString) == 0)//if empty input string print empty output string
      numTokens++;   //increase number of tokens per iteration
     }
     wordNode * ans = sort(head);    //sort the LL
+    wordNode * ptr = ans;           //dummy pointer to traverse LL
+    puts("Sorted List:");
+    while(ptr != NULL)     //prints out words in the LL
+    {
+        puts(ptr->word);
+        ptr = ptr->next;
+    }
     return ans;
 }
 wordNode * insertNode(char * word, wordNode * head)
