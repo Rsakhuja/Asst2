@@ -21,6 +21,6 @@ void readFile(char* fullPathToFile,  FileProcessElement* root,struct HashNode* m
 
 FileProcessElement* recursiveFileGather(char* rootDirFile,  FileProcessElement* addHere);
 void printFileElements( FileProcessElement* root);
-
+char* getFileName(char* rootDirFile);
 
 #endif /* FileList_h */
