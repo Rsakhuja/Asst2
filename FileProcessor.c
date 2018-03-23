@@ -1,10 +1,7 @@
 //
 //  FilesProcess.c
-//  Asst2New
-//
-//  Created by Ridhima Sakhuja on 3/12/18.
-//  Copyright © 2018 Ridhima Sakhuja. All rights reserved.
-//
+//  Asst2
+
 // Recursively read the file names from a given directory
 /**
        folder
@@ -29,6 +26,27 @@
 #include <dirent.h>
 
 #include "FileProcessor.h"
+
+char* getFileName(char* rootDirFile){
+//just get file name
+        int rootIndex = strlen(rootDirFile)-1;
+        char* file;
+        while(rootDirFile[rootIndex] != '/'){
+            //printf("%c\n", rootDirFile[index]);
+            rootIndex --; 
+        }
+        rootIndex ++;
+        printf("%c\n", rootDirFile[rootIndex]);
+        int fileLength = (strlen(rootDirFile)-1)- rootIndex;
+        file = malloc(fileLength +1);
+        int fileIndex = 0;
+       while(fileIndex <= fileLength){
+           file[fileIndex] = rootDirFile[rootIndex];
+           fileIndex ++;
+           rootIndex ++;
+       }
+       return file;
+}
 
 FileProcessElement* recursiveFileGather(char* rootDirFile,  FileProcessElement* root){
     DIR* d;
@@ -99,10 +117,10 @@ FileProcessElement* recursiveFileGather(char* rootDirFile,  FileProcessElement* 
         //     index --; 
         // }
         // printf("%s\n", file);
-       
+       char* file = getFileName(rootDirFile);
         // Both rootDir and file name are the same in this case so no need to have 2 sepaarte
-        newFile->fileName = malloc(strlen(rootDirFile)+1);  //newFile->rootFolder;
-        strcat(newFile->fileName,rootDirFile);
+        newFile->fileName = malloc(strlen(file)+1);  //newFile->rootFolder;
+        strcat(newFile->fileName,file);
         newFile->next = NULL;
 
         root->next = newFile;
