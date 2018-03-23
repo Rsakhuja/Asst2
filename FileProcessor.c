@@ -49,22 +49,25 @@ FileProcessElement* recursiveFileGather(char* rootDirFile,  FileProcessElement* 
                 strcat(folder, rootDirFile);
                 strcat(folder,"/");
                 strcat(folder, dir->d_name);
-               printf("Root %s   Sub-Folder %s\n", rootDirFile, dir->d_name);
+               //printf("Root %s   Sub-Folder %s\n", rootDirFile, dir->d_name);
             //    printf("%s\n",rootDir);
                 
                 recursiveFileGather(folder, root);
             }else{
+                folder[0] = '\0';
                 strcat(folder, rootDirFile);
                 strcat(folder,"/");
                 strcat(folder, dir->d_name);
+                //printf("%s\n", dir->d_name);
 
                 FileProcessElement *newFile;
                 newFile= ( FileProcessElement*)malloc(sizeof( FileProcessElement));
                 newFile->rootFolder = malloc(strlen(folder)+1);
                 strcat(newFile->rootFolder,folder);
-                folder[0] = '\0';
                 //printf("%s\n",newFile->rootFolder);
+                folder[0] = '\0';
                 newFile->fileName = dir->d_name;
+                //printf("Filenames: %s\n",newFile->fileName);
                 newFile->next = NULL;
                 
                 if(root->next == NULL){
@@ -84,7 +87,19 @@ FileProcessElement* recursiveFileGather(char* rootDirFile,  FileProcessElement* 
         newFile= ( FileProcessElement*)malloc(sizeof( FileProcessElement));
         newFile->rootFolder = malloc(strlen(rootDirFile)+1);
         strcat(newFile->rootFolder,rootDirFile);
+         //printf("%s\n",newFile->rootFolder);
 
+        //just get file name
+        // int index = strlen(rootDirFile);
+        // char file[1000]; 
+        // int fileIndex= 0;
+        // while(rootDirFile[index] != '/'){
+        //     file[fileIndex] = rootDirFile[index];
+        //     fileIndex++;
+        //     index --; 
+        // }
+        // printf("%s\n", file);
+       
         // Both rootDir and file name are the same in this case so no need to have 2 sepaarte
         newFile->fileName = malloc(strlen(rootDirFile)+1);  //newFile->rootFolder;
         strcat(newFile->fileName,rootDirFile);
@@ -113,7 +128,7 @@ void readFile(char* filepathtofolder,  FileProcessElement* root,struct HashNode*
         fptr = fopen(temp->rootFolder,"r");
 
 
-      printf("OPEN FILE=> %s     %s\n",temp->rootFolder,temp->fileName);
+     printf("OPEN FILE=> %s     %s\n",temp->rootFolder,temp->fileName);
        char buffer[1024];
        char *word;
 
@@ -141,7 +156,7 @@ void printFileElements( FileProcessElement* root){
     FileProcessElement* temp;
     temp = root->next;
     while(temp != NULL){
-        printf("%s    %p    %p \n",temp->fileName, (void*) temp, (void *)temp->next);
+      // printf("%s    %p    %p \n",temp->fileName, (void*) temp, (void *)temp->next);
         temp = temp->next;
     }
 }
