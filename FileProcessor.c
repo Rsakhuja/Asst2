@@ -56,9 +56,11 @@ FileProcessElement* recursiveFileGather(char* rootDirFile,  FileProcessElement* 
 //    struct FileProcessElement* root = NULL;
     if(d){
         while((dir = readdir(d)) != NULL){
-            if(dir->d_name[0] == '.'){
+            while((dir = readdir(d)) != NULL){
+            if(strcmp(dir->d_name, ".") ==0  || strcmp(dir->d_name, "..") ==0 || strcmp(dir->d_name, ".DS_Store") ==0){
                 continue;
             }
+            
             if(dir->d_type == DT_DIR){
                 // Concatenate to create the absolute path for the folder that was found
                 // rootFolder = rrootDir +"/"+dir->d_name
