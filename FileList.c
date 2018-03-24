@@ -71,6 +71,46 @@ void  swapTwo( FileListElement* node1, FileListElement* node2){
     // return NULL;
 }
 
+int mystrcasecmp(char* str1, char* str2){
+    int i = 0;
+    int flag = 0;    
+    while (flag==0)
+    {
+
+        if (str1[i] == '\0')
+        {
+            flag = -1;
+            break;
+        }
+        if (str2[i] == '\0')
+        {
+            flag = 1;
+            break;
+        }
+
+        int num1 = str1[i];
+        int num2 = str2[i];
+
+        if(isalpha(str1[i])) num1 += 1000;
+        if(isalpha(str2[i])) num2 += 1000;
+        if(num1 >= 48 && num1 <= 57) num1 += 2000;
+        if(num2 >= 48 && num2 <= 57) num2 += 2000;
+        if(str1[i] == '.') num1 += 3000;
+        if(str2[i] == '.') num2 += 3000;
+        
+        if (num1 > num2)
+        {
+            flag = 1;
+        }
+        else if (num1 < num2)
+        {
+            flag = -1;
+        }
+        i++;
+    }
+    return flag;
+}
+
 void sortFiles(struct HashNode* hashPtr){
 
 
@@ -86,7 +126,7 @@ void sortFiles(struct HashNode* hashPtr){
             printf("Check %s %i  %s %i\n", prev->filename, prev->frequency, currPtr->filename, currPtr->frequency);
             if(prev->frequency == currPtr->frequency){
 
-                if(strcmp(prev->filename, currPtr->filename) < 0){
+                if(mystrcasecmp(prev->filename, currPtr->filename) < 0){
                     swapTwo(prev,currPtr);
                 }
 
