@@ -60,7 +60,7 @@ void insertSorted( struct HashNode* newNode,  struct HashNode* root){
         return;
     }
     
-    if(root->next && strcasecmp(newNode->word,root->next->word )<0){
+    if(root->next && mystrcasecmp(newNode->word,root->next->word )<0){
         root->next = newNode;
         newNode->next = currPtr;
         return;
@@ -69,7 +69,7 @@ void insertSorted( struct HashNode* newNode,  struct HashNode* root){
     
     while(currPtr != NULL){
         
-        if ( strcasecmp(prev->word,newNode->word) < 0 && strcasecmp(currPtr->word,newNode->word) >0 ) {
+        if ( mystrcasecmp(prev->word,newNode->word) < 0 && mystrcasecmp(currPtr->word,newNode->word) >0 ) {
             prev->next = newNode;
             newNode->next = currPtr;
             
