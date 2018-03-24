@@ -1,10 +1,6 @@
 //
 //  FileList.c
-//  Asst2New
-//
-//  Created by Ridhima Sakhuja on 3/12/18.
-//  Copyright © 2018 Ridhima Sakhuja. All rights reserved.
-//
+//  Asst2
 // This is a linked list implementtion
 // It will have file + counter
 
