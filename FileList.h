@@ -27,6 +27,7 @@ void addFileElement(struct HashNode* ptr, char* filename);
 void printFiles( struct HashNode* ptr,FILE* fp);
 void sortFiles(struct HashNode* hashPtr);
 void swap(FileListElement* currPtr,FileListElement* prev, FileListElement* temp,struct HashNode* hashPtr);
+int mystrcasecmp(char *str1, char *str2);
 void sortFileList(struct HashNode* hashPtr);
 
 #endif /* FileList_h */
