@@ -1,7 +1,7 @@
 //
-//  FilesProcess.c
+//  FileProcessor.c
 //  Asst2
-
+//
 // Recursively read the file names from a given directory
 /**
        folder
@@ -27,72 +27,83 @@
 
 #include "FileProcessor.h"
 
+//extract file name from path - only used if input folder is file instead of a directory
 char* getFileName(char* rootDirFile){
-//just get file name
         int rootIndex = strlen(rootDirFile)-1;
         char* file;
+
+        //get index of first character after '/'
         while(rootDirFile[rootIndex] != '/'){
             //printf("%c\n", rootDirFile[index]);
             rootIndex --; 
         }
         rootIndex ++;
-        printf("%c\n", rootDirFile[rootIndex]);
-        int fileLength = (strlen(rootDirFile)-1)- rootIndex;
+
+        //get length of file name and malloc file 
+        int fileLength = (strlen(rootDirFile)-1)- rootIndex; 
         file = malloc(fileLength +1);
         int fileIndex = 0;
+        // add characters from rootDirFile to file
        while(fileIndex <= fileLength){
            file[fileIndex] = rootDirFile[rootIndex];
            fileIndex ++;
            rootIndex ++;
        }
-       return file;
+       return file; 
 }
 
+//function opens each directory and adds each file to separate linked list
 FileProcessElement* recursiveFileGather(char* rootDirFile,  FileProcessElement* root){
     DIR* d;
     struct dirent *dir;
     d = opendir(rootDirFile);
-    char  folder[1024];
-//    struct FileProcessElement* root = NULL;
-    if(d){
+    char  folder[1024]; //create buffer
+    if(d){ //if it is a directory
         while((dir = readdir(d)) != NULL){
-            while((dir = readdir(d)) != NULL){
             if(strcmp(dir->d_name, ".") ==0  || strcmp(dir->d_name, "..") ==0 || strcmp(dir->d_name, ".DS_Store") ==0){
                 continue;
             }
             
+            // if(dir->d_name[0] == '.'){
+            //     continue;
+            // }
+            // if(strlen(dir->d_name) == 1 && dir->d_name[0] == '.'){
+            //     continue;
+            // }
+            // if(strlen(dir->d_name) == 2 && strcmp(dir->d_name, "..") =0){
+            //     continue;
+            // }
+            
             if(dir->d_type == DT_DIR){
-                // Concatenate to create the absolute path for the folder that was found
+                // Create file path: concatenate to create the absolute path for the folder that was found
                 // rootFolder = rrootDir +"/"+dir->d_name
 //                rootDir = dir->d_name;
-                folder[0] = '\0';
+                folder[0] = '\0'; //reset file path before concatenating
                 strcat(folder, rootDirFile);
                 strcat(folder,"/");
                 strcat(folder, dir->d_name);
-               //printf("Root %s   Sub-Folder %s\n", rootDirFile, dir->d_name);
-            //    printf("%s\n",rootDir);
                 
-                recursiveFileGather(folder, root);
-            }else{
-                folder[0] = '\0';
+                recursiveFileGather(folder, root); //call function if directory
+            }else{  //otherwise add file to linked list
+                folder[0] = '\0'; //reset file path
+                //concatentate to create new file path
                 strcat(folder, rootDirFile);
                 strcat(folder,"/");
                 strcat(folder, dir->d_name);
-                //printf("%s\n", dir->d_name);
 
+                //create new FileProcessElement and intialize
                 FileProcessElement *newFile;
                 newFile= ( FileProcessElement*)malloc(sizeof( FileProcessElement));
                 newFile->rootFolder = malloc(strlen(folder)+1);
-                strcat(newFile->rootFolder,folder);
-                //printf("%s\n",newFile->rootFolder);
-                folder[0] = '\0';
+                strcat(newFile->rootFolder,folder);  //add folder to fqname
+
+                folder[0] = '\0'; //reset 
                 newFile->fileName = dir->d_name;
-                //printf("Filenames: %s\n",newFile->fileName);
                 newFile->next = NULL;
                 
-                if(root->next == NULL){
+                if(root->next == NULL){ //if first element in linkedlist, just add to root->next
                     root->next = newFile;
-                }else{
+                }else{ //otherwise add to front
                      FileProcessElement *temp;
                     temp = root->next;
                     root->next = newFile;
@@ -101,63 +112,44 @@ FileProcessElement* recursiveFileGather(char* rootDirFile,  FileProcessElement* 
                 
             }
         }
+    //otherwise if its a file
     } else {
-        // its a file
+        //create new FileProcessElement and intialize
         FileProcessElement *newFile;
         newFile= ( FileProcessElement*)malloc(sizeof( FileProcessElement));
         newFile->rootFolder = malloc(strlen(rootDirFile)+1);
         strcat(newFile->rootFolder,rootDirFile);
-         //printf("%s\n",newFile->rootFolder);
-
-        //just get file name
-        // int index = strlen(rootDirFile);
-        // char file[1000]; 
-        // int fileIndex= 0;
-        // while(rootDirFile[index] != '/'){
-        //     file[fileIndex] = rootDirFile[index];
-        //     fileIndex++;
-        //     index --; 
-        // }
-        // printf("%s\n", file);
-       char* file = getFileName(rootDirFile);
-        // Both rootDir and file name are the same in this case so no need to have 2 sepaarte
-        newFile->fileName = malloc(strlen(file)+1);  //newFile->rootFolder;
+        
+        //extract just file name from path and add as newFile->fileName
+        char* file = getFileName(rootDirFile);
+        newFile->fileName = malloc(strlen(file)+1);  
         strcat(newFile->fileName,file);
         newFile->next = NULL;
 
         root->next = newFile;
-
-
-       // puts("is a file");
     }
    
     return root;
 }
 
-void readAllFiles(char* rootFolder, struct HashNode* map){
-   
-}
-
+//iterate through linked list and read each file 
 void readFile(char* filepathtofolder,  FileProcessElement* root,struct HashNode* map){
     FileProcessElement* temp;
     temp = root->next;
+    //iterate and open each file
     while(temp){
         FILE* fptr;
-
-
         fptr = fopen(temp->rootFolder,"r");
-
-
      printf("OPEN FILE=> %s     %s\n",temp->rootFolder,temp->fileName);
        char buffer[1024];
        char *word;
 
         if(fptr!= NULL){
-            if(feof(fptr)){
+            if(feof(fptr)){  //if fptr is empty 
                 puts("empty file");
                 continue;
             }
-            while(!feof(fptr)){
+            while(!feof(fptr)){ //otherwise add each word to map 
                 fscanf(fptr,"%s",buffer);
                 word = malloc(strlen(buffer)+1);
                 strcat(word,buffer);
@@ -172,6 +164,7 @@ void readFile(char* filepathtofolder,  FileProcessElement* root,struct HashNode*
     }
 }
 
+//print each file element in linked list - only used for testing purposes 
 void printFileElements( FileProcessElement* root){
     FileProcessElement* temp;
     temp = root->next;
