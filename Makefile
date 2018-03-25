@@ -6,7 +6,7 @@ DEPDIR	= dep
 DATDIR	= data
 
 CC	= gcc
-TARGET	= invertedIndex
+TARGET	= index
 CFLAGS	= -Wall -Wextra -pedantic -g -O0 -I$(HDRDIR)
 LFLAGS	=
 
@@ -21,7 +21,7 @@ REMOVE	:= rm -rf
 $(BINDIR)/$(TARGET): $(OBJECTS) $(CMN_OBJ)
 	mkdir -p $(BINDIR)
 	$(CC) $(LFLAGS) -o $@ $(OBJECTS) $(CMN_OBJ)
-	@echo "Linking complete"
+	@echo "Linking successful"
 
 -include $(DEPS)
 
@@ -31,7 +31,7 @@ $(OBJECTS): $(OBJDIR)/%.o : $(SRCDIR)/%.c
 	mkdir -p $(DEPDIR)
 	$(CC) -c $(CFLAGS) $< -o $@
 	$(CC) -I$(HDRDIR) -MM -MT '$(OBJDIR)/$*.o' $(SRCDIR)/$*.c > $(DEPDIR)/$*.d
-	@echo "Compiled $<"
+	@echo "Compilation successful $<"
 
 # Generate file list for cscope
 cscope.files: $(SOURCES) $(HEADERS)
@@ -44,7 +44,7 @@ cscope.out: cscope.files
 .PHONY: clean
 clean:
 	$(REMOVE) $(OBJECTS) $(OBJDIR) $(BINDIR) $(DEPDIR)
-	@echo "Deleted $<"
+	@echo "Cleaned $<"
 
 .PHONY: remove
 remove:
@@ -52,7 +52,7 @@ remove:
 	$(REMOVE) $(OBJECTS)
 	$(REMOVE) $(DEPS)
 	$(REMOVE) cscope.*
-	@echo "Deleted $<"
+	@echo "Cleaned $<"
 
 .PHONY: cscope
 cscope: cscope.out
